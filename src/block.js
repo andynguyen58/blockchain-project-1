@@ -75,7 +75,7 @@ class Block {
     let blockDataObj = JSON.parse(decodedData);
 
     // Resolve with the data if the object isn't the Genesis block
-    if ((this.previousBlockHash && !!this.height) || !blockDataObj?.data) {
+    if ((!this.previousBlockHash && !this.height) || !blockDataObj?.data) {
       return null;
     }
 

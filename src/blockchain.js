@@ -124,19 +124,27 @@ class Blockchain {
 
       // Check if the time elapsed is less than 5 minutes (compare the time in the message and currentTime)
       if (currentTime - time >= 300) {
-        reject(false);
+        reject({
+          status: false,
+          message: "Time elapsed must be greater or equal 5 minutes!",
+        });
       }
 
       // Verify the message with wallet address and signature
       if (!bitcoinMessage.verify(message, address, signature)) {
-        reject(false);
+        reject({
+          status: false,
+          result: "Invalid message",
+          message,
+          address,
+          signature,
+        });
       }
 
       // Create the block and add it to the chain
       const data = {
         address,
         star,
-        description: "starRegistry",
       };
 
       const block = new Block({

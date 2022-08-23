@@ -75,6 +75,14 @@ class Blockchain {
 
       if (!block.validate()) {
         reject(false);
+
+        return;
+      }
+
+      if (!this.validateChain()) {
+        reject(false);
+
+        return;
       }
 
       self.chain.push(block);
@@ -128,6 +136,8 @@ class Blockchain {
           status: false,
           message: "Time elapsed must be greater or equal 5 minutes!",
         });
+
+        return;
       }
 
       // Verify the message with wallet address and signature
@@ -139,6 +149,8 @@ class Blockchain {
           address,
           signature,
         });
+
+        return;
       }
 
       // Create the block and add it to the chain
@@ -232,15 +244,15 @@ class Blockchain {
     let self = this;
     let errorLog = [];
     return new Promise(async (resolve, reject) => {
-      errorLog = self.chain.forEach(async (block) => {
+      self.chain.forEach(async (block) => {
         const isValid = await block.validate();
 
         if (!isValid) {
-          return errorLog.push("Invalid: " + block.hash);
+          return errorLog.push("Invalid: " + block?.hash);
         }
 
-        if (block?.previousBlockHash !== self.chain[block.height - 1].hash) {
-          return errorLog.push("Error with previousBlockHash: " + block.hash);
+        if (block?.previousBlockHash !== self.chain?.[block.height - 1]?.hash) {
+          return errorLog.push("Error with previousBlockHash: " + block?.hash);
         }
       });
 

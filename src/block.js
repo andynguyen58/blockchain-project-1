@@ -38,16 +38,22 @@ class Block {
     let self = this;
     return new Promise((resolve, reject) => {
       // Save in auxiliary variable the current block hash
-      let currentHash = self.hash;
-      self.hash = null;
+      const currentHash = self.hash;
+
+      const newBlock = {
+        ...self,
+        hash: null,
+      };
 
       // Recalculate the hash of the block
-      self.hash = SHA256(JSON.stringify(self)).toString();
+      const newHash = SHA256(JSON.stringify(newBlock)).toString();
 
       // Comparing if the hashes changed
       // Returning the Block is not valid
-      if (currentHash !== self.hash) {
+      if (currentHash !== newHash) {
         reject(false);
+
+        return;
       }
 
       // Returning the Block is valid
